@@ -8,7 +8,12 @@ async function loadWorker() {
 loadWorker();
 
 onmessage = async function(event) {
-    const uint8Array = new Uint8Array(event.data.file);
-    const result = parseEvent(uint8Array, "player_death", ["health"], ["total_rounds_played"]);
-    postMessage(result);
+    let fileName = event.data.file.name;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const uint8Array = new Uint8Array(event.target.result);
+        const result = parseEvent(uint8Array, "player_death", ["health"], ["total_rounds_played"]);
+        postMessage({"json": result, "file": fileName});
+    };
+    reader.readAsArrayBuffer(event.data.file);
 };

@@ -1,5 +1,8 @@
+const DEFAULT_N_WORKERS = 8;
+
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    var startTime = performance.now();
     const weaponName = document.getElementById('weapon').value;
     const nRoundKills = document.getElementById('kills').value;
     const files = document.getElementById('demoFiles').files;
@@ -8,32 +11,51 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
     let processedFiles = 0;
     document.getElementById('fileCounter').textContent = 'Demos searched: ' + processedFiles + '/' + totalFiles;
 
-    var startTime = performance.now();
-    for (const file of files) {
-        totalSize += file.size;
-
-        const worker = new Worker('worker.js');
-        worker.onmessage = function(event) {
-            processedFiles++;
-
-            generateTableFromData(event.data, weaponName, nRoundKills, file.name);
-            document.getElementById('fileCounter').textContent = 'Demos searched: ' + processedFiles + '/' + totalFiles;
-            worker.terminate();
-            
-            if (processedFiles == totalFiles){
-                var endTime = performance.now();
-                document.getElementById('fileCounter').textContent = 'Done in ' + ((endTime - startTime) / 1000).toFixed(2) + 
-                ' seconds' + ' (' + (totalSize / 1000000000).toFixed(2) + ' GB)';
-            }
-        };
-        
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const arrayBuffer = event.target.result;
-            worker.postMessage({ file: arrayBuffer });
-        };
-        reader.readAsArrayBuffer(file);
+    // Some web worker stuff
+    const numWorkers = Math.min(DEFAULT_N_WORKERS, files.length);
+    const workers = [];
+    for (let i = 0; i < numWorkers; i++) {
+        workers.push(new Worker('./worker.js'));
     }
+    let tasks = []
+    for (let i = 0; i < files.length; i++){
+        tasks.push(files[i])
+    }
+    let fileIdx = 0;
+    for (let i = 0; i < numWorkers; i++){
+        totalSize += tasks[fileIdx].size;
+        workers[i].postMessage({ file: tasks[i] });
+        fileIdx++;
+    }
+
+    workers.forEach((worker, index) => {
+        worker.onerror = function (e) {
+            processedFiles++;
+        }
+        worker.onmessage = function (e) {
+          processedFiles++;
+          generateTableFromData(e.data.json, weaponName, nRoundKills, e.data.file);
+          document.getElementById('fileCounter').textContent = 'Demos searched: ' + processedFiles + '/' + totalFiles;
+          
+          // process new demo if any left
+          if (fileIdx < totalFiles){
+            totalSize += tasks[fileIdx].size;
+            worker.postMessage({ file: tasks[fileIdx] });
+            fileIdx++;
+          }
+          // Check if we are done
+          if (processedFiles == totalFiles){
+            var endTime = performance.now();
+            document.getElementById('fileCounter').textContent = 'Done in ' + ((endTime - startTime) / 1000).toFixed(2) + 
+            ' seconds' + ' (' + (totalSize / 1000000000).toFixed(2) + ' GB)';
+            // terminate all workers after we are done.
+            workers.forEach((w, index) => {
+                w.terminate();
+            });
+            return;
+          }
+        };
+    });
 });
 
 function generateTableFromData(events, weaponName, nRoundKills, fileName) {
@@ -55,12 +77,17 @@ function generateTableFromData(events, weaponName, nRoundKills, fileName) {
 
         for (let [key, value] of Object.entries(killsPerPlayer)) {
             if (value == nRoundKills) {
-                wantedRows.push({"name": key, "kills": value, "round": round, "file": fileName, "tick": killsThisRound[0].get("tick")});
+                let wantedKills = events.filter(kill => kill.get("total_rounds_played") == round && kill.get("attacker_name") == key &&
+                (kill.get("weapon") === weaponName || weaponName == "Any" ||
+                (weaponName == "knife" && kill.get("weapon").includes("knife"))||
+                (weaponName == "knife" && kill.get("weapon") == "bayonet") ));
+                if (wantedKills.length > 0){
+                    wantedRows.push({"name": key, "kills": value, "round": round, "file": fileName, "tick": wantedKills[0].get("tick")});
+                }
             }
         }
     }
     let table = document.getElementById("table").querySelector("tbody");
-
     wantedRows.forEach((rowItem, i) => {
         let row = table.insertRow();
         row.insertCell(0).innerHTML = rowItem.name;
