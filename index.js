@@ -46,7 +46,9 @@ function generateTableFromData(events, weaponName, nRoundKills, fileName) {
         killsThisRound.forEach(item => {
             const attackerName = item.get("attacker_name");
             const kills = killsPerPlayer[attackerName] || 0;
-            if (item.get("weapon") === weaponName || weaponName == "Any") {
+            if (item.get("weapon") === weaponName || weaponName == "Any" ||
+             (weaponName == "knife" && item.get("weapon").includes("knife"))||
+             (weaponName == "knife" && item.get("weapon") == "bayonet") ) {
                 killsPerPlayer[attackerName] = kills + 1;
             }
         });
