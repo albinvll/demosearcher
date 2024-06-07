@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" sizes="any" type="image/svg+xml" href="/images/favicon.svg">
+    <title>Search CS2 Demos</title>
+</head>
+<body>
+    <div class="outer-container">
+        <h1>Search CS2 demos for interesting rounds</h1>
+        <div class="inner-container">
+            <div class="form-container">
+                <!-- Probably not the correct way of doing this :D -->
+                <form id="searchForm" method="post" action="javascript:void(0)">
+                    <label for="weapon">Weapon</label>
+                    <select id="weapon" name="weapon">
+                      <option value="Any" selected>Any</option>
+                      <option value="deagle">Desert Eagle</option>
+                      <option value="elite">Dual Berettas</option>
+                      <option value="glock">Glock-18</option>
+                      <option value="ak47">AK-47</option>
+                      <option value="aug">AUG</option>
+                      <option value="awp">AWP</option>
+                      <option value="famas">FAMAS</option>
+                      <option value="g3sg1">G3SG1</option>
+                      <option value="galilar">Galil AR</option>
+                      <option value="m249">M249</option>
+                      <option value="m4a1">M4A1</option>
+                      <option value="mac10">MAC-10</option>
+                      <option value="p90">P90</option>
+                      <option value="zone_repulsor">Zone Repulsor</option>
+                      <option value="mp5sd">MP5-SD</option>
+                      <option value="ump45">UMP-45</option>
+                      <option value="xm1014">XM1014</option>
+                      <option value="bizon">PP-Bizon</option>
+                      <option value="mag7">MAG-7</option>
+                      <option value="negev">Negev</option>
+                      <option value="sawedoff">Sawed-Off</option>
+                      <option value="tec9">Tec-9</option>
+                      <option value="taser">Taser</option>
+                      <option value="hkp2000">P2000</option>
+                      <option value="mp7">MP7</option>
+                      <option value="mp9">MP9</option>
+                      <option value="nova">Nova</option>
+                      <option value="p250">P250</option>
+                      <option value="scar20">SCAR-20</option>
+                      <option value="sg556">SG 553</option>
+                      <option value="ssg08">SSG 08</option>
+                      <option value="knife">Knife</option>
+                      <option value="flashbang">Flashbang</option>
+                      <option value="hegrenade">HE Grenade</option>
+                      <option value="smokegrenade">Smoke Grenade</option>
+                      <option value="molotov">Molotov</option>
+                      <option value="decoy">Decoy</option>
+                      <option value="incgrenade">Incendiary Grenade</option>
+                    </select>
+                    <label for="kills">Number of kills in round</label>
+                    <select id="kills" name="kills" required>
+                        <option value="">Select number of kills</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label for="demoFiles">Select Demo Files</label>
+                    <input type="file" id="demoFiles" name="demoFiles" accept=".dem" multiple required>
+                    <button type="submit">Search</button>
+                </form>
+                <span id="fileCounter"></span>
+            </div>
+
+            <div class="table-container">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>Player name</th>
+                            <th>Number of kills</th>
+                            <th>Round</th>
+                            <th>Tick of first kill</th>
+                            <th>File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    
+  <div class="banner">
+    <p>Everything is done locally. Demos do not leave your machine. </p>
+    <p>Source code available at: https://github.com/LaihoE/demosearcher</p>
+    <p>Create your own version for free using demoparser: https://github.com/LaihoE/demoparser</p>
+
+  </div>
+  <script type="module" src="index.js"></script>
+</body>
+</html>

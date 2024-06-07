@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+}
+
+.outer-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.inner-container {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.form-container {
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+select, input, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+}
+
+.table-container {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+#table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+#table th, #table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+    height: 40px;
+}
+
+#table th {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    text-align: center;
+}
+
+.banner {
+    background-color: #000000;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
