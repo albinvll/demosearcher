@@ -37,7 +37,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
           generateTableFromData(e.data.json, weaponName, nRoundKills, e.data.file);
           document.getElementById('fileCounter').textContent = 'Demos searched: ' + processedFiles + '/' + totalFiles;
           
-          // process new demo if any left
+          // process next demo if any left
           if (fileIdx < totalFiles){
             totalSize += tasks[fileIdx].size;
             worker.postMessage({ file: tasks[fileIdx] });
@@ -58,7 +58,8 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
     });
 });
 
-function generateTableFromData(events, weaponName, nRoundKills, fileName) {
+function generateTableFromData(eventsNotFiltered, weaponName, nRoundKills, fileName) {
+    let events = eventsNotFiltered.filter(e => e.get("is_warmup_period") == false);
     let maxRound = Math.max(...events.map(event => event.get("total_rounds_played")));
     const wantedRows = [];
     for (let round = 0; round <= maxRound; round++) {
@@ -82,7 +83,7 @@ function generateTableFromData(events, weaponName, nRoundKills, fileName) {
                 (weaponName == "knife" && kill.get("weapon").includes("knife"))||
                 (weaponName == "knife" && kill.get("weapon") == "bayonet") ));
                 if (wantedKills.length > 0){
-                    wantedRows.push({"name": key, "kills": value, "round": round, "file": fileName, "tick": wantedKills[0].get("tick")});
+                    wantedRows.push({"name": key, "kills": value, "round": round + 1, "file": fileName, "tick": wantedKills[0].get("tick")});
                 }
             }
         }
