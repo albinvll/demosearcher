@@ -2,6 +2,10 @@ const DEFAULT_N_WORKERS = 8;
 
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    // Clear table
+    let tableBody = document.getElementById("table").querySelector("tbody");
+    tableBody.innerHTML = '';
+
     var startTime = performance.now();
     const weaponName = document.getElementById('weapon').value;
     const roundType = document.getElementById('roundType').value;
