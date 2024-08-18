@@ -21,22 +21,6 @@ const main = () => {
 
 document.getElementById("searchForm").addEventListener("submit", main);
 
-function generateDataArrayFromData(output, showData) {
-	let dataArray = [];
-
-	output.forEach((rowItem) => {
-		// Create an object for each row and push it into the dataArray
-		let dataObject = {
-			name: rowItem.name,
-			round: rowItem.round,
-			tick: rowItem.tick,
-			file: rowItem.file,
-		};
-		dataArray.push(dataObject);
-	});
-	showData(dataArray);
-	return dataArray;
-}
 
 function generateTableFromData(output) {
 	let table = document.getElementById("table").querySelector("tbody");
