@@ -1,4 +1,4 @@
-import { processDemo } from "./processing";
+import { processDemo } from "./processing.js";
 const sendMessage = (responseText) => {
 	document.getElementById("fileCounter").textContent = responseText;
 };
