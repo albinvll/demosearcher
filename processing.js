@@ -59,7 +59,6 @@ export const processDemo = (
 			} else {
 				// Check if we are done
 				if (processedFiles == totalFiles) {
-					console.log("DONE");
 					var endTime = performance.now();
 					const responseText =
 						"Done in " +
